@@ -86,7 +86,7 @@ read temperature → `decide()` → apply to fan → publish state.
 |---|---|---|
 | `modes.py` | `decide()`, `cycle_on()`, `in_quiet_window()`. Pure, no I/O. | stdlib only |
 | `fan.py` | Wraps the `uhubctl` call. Idempotent — no subprocess spawned when already in the requested state. | `subprocess` |
-| `temperature.py` | Thin wrapper over `gpiozero.CPUTemperature`, so tests can substitute it. | `gpiozero` |
+| `temperature.py` | Reads `/sys/class/thermal/thermal_zone0/temp` directly. | stdlib only |
 | `mqtt_bridge.py` | Discovery, subscribe, publish, availability. Transport only — no fan logic. | `paho-mqtt` |
 | `state.py` | Persists the current mode to a JSON file. | stdlib only |
 | `config.py` | Thresholds, timings, topics, broker credentials, uhubctl location. | stdlib only |
@@ -182,7 +182,13 @@ The broker address and credentials are filled in on the Pi and are not committed
 - `uhubctl` needs root, so the service runs as root.
 - **The existing cron entry must be removed during cutover**, or it will fight the
   daemon over the fan.
-- `requirements.txt`: `paho-mqtt`, `gpiozero`.
+- `requirements.txt`: `paho-mqtt`.
+
+**Deviation from the original design, made during implementation:** the
+temperature reader no longer uses `gpiozero`. `CPUTemperature` reads
+`/sys/class/thermal/thermal_zone0/temp`, so reading that file directly is
+equivalent, removes the project's only hardware dependency, and makes the
+reader testable off-Pi with a temporary file instead of a mock.
 
 ## Repository changes
 

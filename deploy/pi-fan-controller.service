@@ -1,0 +1,17 @@
+[Unit]
+Description=Raspberry Pi fan controller with Home Assistant control
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# uhubctl needs root to switch USB hub port power.
+User=root
+WorkingDirectory=/opt/pi-fan-controller
+ExecStart=/opt/pi-fan-controller/.venv/bin/python -m fan_controller.main --config /etc/pi-fan-controller.toml
+Restart=always
+RestartSec=10
+StateDirectory=pi-fan-controller
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,35 @@
+# Copy to /etc/pi-fan-controller.toml and fill in your broker details.
+# Every key is optional; anything omitted keeps the default shown here.
+
+# --- Home Assistant's MQTT broker (usually the Mosquitto add-on) ---
+mqtt_host = "homeassistant.local"
+mqtt_port = 1883
+# mqtt_username = "pi"
+# mqtt_password = "changeme"
+
+# --- Thermal override ---
+# Above thermal_on_c the fan runs regardless of mode or hour; below
+# thermal_off_c the demand releases. The gap is hysteresis, so the fan
+# cannot chatter around the threshold.
+thermal_on_c = 55.0
+thermal_off_c = 48.0
+
+# --- Duty cycle ---
+# 300 = five minutes on, five minutes off.
+cycle_seconds = 300
+tick_seconds = 10
+
+# --- Guest mode quiet window (wraps past midnight) ---
+guest_quiet_start = "21:00"
+guest_quiet_end = "08:00"
+
+# --- Hardware ---
+# Find yours by running: uhubctl
+uhubctl_location = "1-1"
+uhubctl_port = "2"
+
+# --- MQTT topics ---
+base_topic = "pi-fan"
+discovery_prefix = "homeassistant"
+
+state_file = "/var/lib/pi-fan-controller/state.json"
