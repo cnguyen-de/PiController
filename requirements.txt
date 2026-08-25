@@ -1,2 +1,4 @@
 paho-mqtt>=2.0
 tomli>=1.1.0; python_version < "3.11"
+# paho needs these on Python 3.7; old pip does not honour its own markers.
+typing-extensions; python_version < "3.8"

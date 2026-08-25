@@ -7,6 +7,10 @@ import signal
 import sys
 import time
 
+# Imported at module scope, not inside main(), so the test suite exercises it
+# and a missing or broken paho install fails in CI rather than on the Pi.
+import paho.mqtt.client as mqtt
+
 from .config import DEFAULT_PATH, load_config
 from .controller import Controller
 from .fan import Fan
@@ -71,7 +75,6 @@ def main(argv=None):
 
     config = load_config(args.config)
 
-    import paho.mqtt.client as mqtt
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
     controller, bridge = build(config, client)
