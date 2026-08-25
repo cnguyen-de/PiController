@@ -4,7 +4,12 @@ import dataclasses
 import datetime
 import logging
 import pathlib
-import tomllib
+from typing import Optional
+
+try:  # Python 3.11+
+    import tomllib
+except ImportError:  # Raspbian Buster ships Python 3.7
+    import tomli as tomllib
 
 log = logging.getLogger(__name__)
 
@@ -31,8 +36,8 @@ class Config:
 
     mqtt_host: str = "localhost"
     mqtt_port: int = 1883
-    mqtt_username: str | None = None
-    mqtt_password: str | None = None
+    mqtt_username: Optional[str] = None
+    mqtt_password: Optional[str] = None
 
     base_topic: str = "pi-fan"
     discovery_prefix: str = "homeassistant"
